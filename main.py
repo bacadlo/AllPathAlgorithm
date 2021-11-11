@@ -171,8 +171,12 @@ def getLevelNV(numVL, getSlice, nvArrList, countNv):
 def findMiddleNodes(nodes, currentLevel, indexNumber):
     middleString = ""
     middleNumber = 0
+    numerator = 0
     while currentLevel > 1:
-        middleNumber = int(((indexNumber % (nodes ** currentLevel)) / (nodes ** (currentLevel - 1))) + 1)
+        numerator = (indexNumber % (nodes ** currentLevel))
+        middleNumber = int((numerator / (nodes ** (currentLevel - 1))) + 1)
+        if (currentLevel == 2 and (numerator % nodes) == 0):
+            middleNumber -= 1
         middleString += str(middleNumber)
         middleString += ", "
         currentLevel -= 1
@@ -191,9 +195,14 @@ def shortestPath(index, nodes, start, end):
         if mod == 0:
             mod = nodes
         if int(mod) == int(end):
-            if int((indexNumber / (nodes ** level)) + 1) == int(start):
-                middle = findMiddleNodes(nodes, level, indexNumber)
-                return "The path is: " + str(start) + ", " + middle + str(end)
+            if indexNumber % nodes == 0 and level == 1:
+                if int((indexNumber / (nodes ** level))) == int(start):
+                    middle = findMiddleNodes(nodes, level, indexNumber)
+                    return "The path is: " + str(start) + ", " + middle + str(end)
+            else:
+                if int((indexNumber / (nodes ** level)) + 1) == int(start):
+                    middle = findMiddleNodes(nodes, level, indexNumber)
+                    return "The path is: " + str(start) + ", " + middle + str(end)
 
 
 def setNodes(start, end):
@@ -302,7 +311,6 @@ def indexGraph(graphName):
             oldNV = sum(countNv)
             getLevelNV(numVL, getSlice, nvArrList, countNv)
 
-            # This condition is what they call a Spike Solution, it works for now but likely won't hold
             if (sum(countNv) == oldNV) and countNv[numVL] != 0 and sum(countNv) < num:
                 countNv[numVL] -= 1
             # updating exit variable
@@ -318,7 +326,7 @@ def indexGraph(graphName):
 
         # updating iterator for 1st if statement
         addIndex += 1
-        # This works because it is ABSOLUTELY impossible for an index value to be greater than the Summation of
+        # This works because an index value cannot be greater than the Summation of
         # number of nodes to the number of nodes power, adding every exponent down to node^2
         if indexList[idCount] > levelSummation(num, num):
             exSum = 0
@@ -334,6 +342,6 @@ Write new code below this block
 """
 graphPath = "./uploads/graph.csv"
 print(indexGraph(str(graphPath)))
-nodeStart = 4
-nodeEnd = 5
+nodeStart = 5
+nodeEnd = 1
 print(setNodes(nodeStart, nodeEnd))
