@@ -166,6 +166,7 @@ def getLevelNV(numVL, getSlice, nvArrList, countNv):
                 countNv[numVL] = sum(newNVSlice)
             nvArrList[numVL] = newNVSlice
 
+
 # Finds the nodes in between start and end
 def findMiddleNodes(nodes, currentLevel, indexNumber):
     middleString = ""
@@ -192,8 +193,23 @@ def shortestPath(index, nodes, start, end):
         if int(mod) == int(end):
             if int((indexNumber / (nodes ** level)) + 1) == int(start):
                 middle = findMiddleNodes(nodes, level, indexNumber)
-                print("The path is: " + str(start) + ", " + middle + str(end))
-                break
+                return "The path is: " + str(start) + ", " + middle + str(end)
+
+
+def setNodes(start, end):
+    isInRange = True
+    startNode = start
+    if int(startNode) < 1 or int(startNode) > num:
+        isInRange = False
+
+    endNode = end
+    if int(endNode) < 1 or int(endNode) > num:
+        isInRange = False
+
+    if isInRange:
+        return shortestPath(indexList, num, startNode, endNode)
+    else:
+        return "Nodes not in Range"
 
 
 def indexGraph(graphName):
@@ -316,24 +332,8 @@ Write new code below this block
 
 
 """
-graphPath = open("./uploads/graph.csv")
+graphPath = "./uploads/graph.csv"
 print(indexGraph(str(graphPath)))
-
-startIncorrect = 1
-while startIncorrect == 1:
-    startNode = input("Enter Starting Node ")
-    if int(startNode) < 1 or int(startNode) > num:
-        print("Node not in range")
-        startIncorrect = 1
-    else:
-        startIncorrect = 0
-endIncorrect = 1
-while endIncorrect == 1:
-    endNode = input("Enter Ending Node ")
-    if int(endNode) < 1 or int(endNode) > num:
-        print("Node not in range")
-        endIncorrect = 1
-    else:
-        endIncorrect = 0
-
-shortestPath(indexList, num, startNode, endNode)
+nodeStart = 4
+nodeEnd = 5
+print(setNodes(nodeStart, nodeEnd))
