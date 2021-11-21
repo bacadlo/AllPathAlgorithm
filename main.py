@@ -3,6 +3,9 @@ import os.path
 from math import sqrt
 import numpy as np
 import pandas as pd
+import requests
+import sys
+import glob
 
 
 def initialSetup(graphFile):
@@ -166,59 +169,47 @@ def getLevelNV(numVL, getSlice, nvArrList, countNv):
                 countNv[numVL] = sum(newNVSlice)
             nvArrList[numVL] = newNVSlice
 
-
 # Finds the nodes in between start and end
 def findMiddleNodes(nodes, currentLevel, indexNumber):
     middleString = ""
     middleNumber = 0
-    numerator = 0
     while currentLevel > 1:
-        numerator = (indexNumber % (nodes ** currentLevel))
-        middleNumber = int((numerator / (nodes ** (currentLevel - 1))) + 1)
-        if (currentLevel == 2 and (numerator % nodes) == 0):
-            middleNumber -= 1
+        middleNumber = int(((indexNumber % (nodes ** currentLevel)) / (nodes ** (currentLevel - 1))) + 1)
         middleString += str(middleNumber)
         middleString += ", "
         currentLevel -= 1
     return middleString
 
 
+
+
 # Finds the shortest path from one node to another
 def shortestPath(index, nodes, start, end):
-    for i in range(len(index)):
-        level = checkLevel(index[i], nodes)
-        if level == 0:
-            level = 1
-        levelSum = levelSummation(level, nodes)
-        indexNumber = index[i] - levelSum
-        mod = (indexNumber % nodes)
-        if mod == 0:
-            mod = nodes
-        if int(mod) == int(end):
-            if indexNumber % nodes == 0 and level == 1:
-                if int((indexNumber / (nodes ** level))) == int(start):
-                    middle = findMiddleNodes(nodes, level, indexNumber)
-                    return "The path is: " + str(start) + ", " + middle + str(end)
-            else:
-                if int((indexNumber / (nodes ** level)) + 1) == int(start):
-                    middle = findMiddleNodes(nodes, level, indexNumber)
-                    return "The path is: " + str(start) + ", " + middle + str(end)
-
-
-def setNodes(start, end):
-    isInRange = True
-    startNode = start
-    if int(startNode) < 1 or int(startNode) > num:
-        isInRange = False
-
-    endNode = end
-    if int(endNode) < 1 or int(endNode) > num:
-        isInRange = False
-
-    if isInRange:
-        return shortestPath(indexList, num, startNode, endNode)
+    if(end < 1 or end > num):
+        print("The Ending node is not in range of the graph")
+    elif(start < 1 or start > num):
+        print("The Starting node is not in range of the graph")
     else:
-        return "Nodes not in Range"
+        for i in range(len(index)):
+            level = checkLevel(index[i], nodes)
+            if level == 0:
+                level = 1
+            levelSum = levelSummation(level, nodes)
+            indexNumber = index[i] - levelSum
+            mod = (indexNumber % nodes)
+            if mod == 0:
+                mod = nodes
+            if int(mod) == int(end):
+                if indexNumber % nodes == 0 and level == 1:
+                    if int((indexNumber / (nodes ** level))) == int(start):
+                        middle = findMiddleNodes(nodes, level, indexNumber)
+                        print("The shortest path from", sys.argv[1], "to", sys.argv[2], "is " + str(start) + ", " + middle + str(end))
+                else:
+                    if int((indexNumber / (nodes ** level)) + 1) == int(start):
+                        middle = findMiddleNodes(nodes, level, indexNumber)
+                        print("The shortest path from", sys.argv[1], "to", sys.argv[2], "is " + str(start) + ", " + middle + str(end))
+
+
 
 
 def indexGraph(graphName):
@@ -257,8 +248,7 @@ def indexGraph(graphName):
     countSl = []
     countNv = getSumSlice(nvArrList, 0)
     countSl = getSumSlice(adjMatrixList, 0)
-    print("our nv count is ", countNv)
-    print("our sl count is ", countSl)
+   
 
     # Empty list for new slices
     getSlice = []
@@ -311,6 +301,7 @@ def indexGraph(graphName):
             oldNV = sum(countNv)
             getLevelNV(numVL, getSlice, nvArrList, countNv)
 
+            # This condition is what they call a Spike Solution, it works for now but likely won't hold
             if (sum(countNv) == oldNV) and countNv[numVL] != 0 and sum(countNv) < num:
                 countNv[numVL] -= 1
             # updating exit variable
@@ -326,13 +317,13 @@ def indexGraph(graphName):
 
         # updating iterator for 1st if statement
         addIndex += 1
-        # This works because an index value cannot be greater than the Summation of
+        # This works because it is ABSOLUTELY impossible for an index value to be greater than the Summation of
         # number of nodes to the number of nodes power, adding every exponent down to node^2
         if indexList[idCount] > levelSummation(num, num):
             exSum = 0
 
-    print(f"\nour index list is {indexList}")
-    return "Path has been Indexed"
+    
+    return ""
 
 
 """
@@ -340,8 +331,12 @@ Write new code below this block
 
 
 """
-graphPath = "./uploads/graph.csv"
-print(indexGraph(str(graphPath)))
-nodeStart = 5
-nodeEnd = 1
-print(setNodes(nodeStart, nodeEnd))
+newest = min(glob.iglob('./uploads/*.csv'), key=os.path.getctime)
+
+print(indexGraph(newest))
+startNode = int(sys.argv[1])
+
+endNode = int(sys.argv[2])
+
+
+shortestPath(indexList, num, startNode, endNode)

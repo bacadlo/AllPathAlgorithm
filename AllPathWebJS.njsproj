@@ -47,7 +47,9 @@
     <Content Include="public\images\algorithm.jpg">
       <Publish>False</Publish>
     </Content>
-    <Content Include="uploads\graph.csv" />
+    <Content Include="test.py">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\help.ejs" />
     <Content Include="views\home.ejs">
       <SubType>Code</SubType>
@@ -68,6 +70,7 @@
     <Folder Include="node_modules\multer\" />
     <Folder Include="node_modules\multer\lib\" />
     <Folder Include="node_modules\multer\storage\" />
+    <Folder Include="public\download\" />
     <Folder Include="uploads\" />
     <Folder Include="views\" />
     <Folder Include="public\" />

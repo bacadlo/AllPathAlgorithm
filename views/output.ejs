@@ -11,12 +11,15 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/styleSheet.css">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> 
 </head>
  <body img src="/images/algorithm.jpg">
 	   <div class="page" >
 
 			<h1 > All Path Algorithm </h1 >
-			<h2 > Help Page </h2 >
+			<h2 > Demo Page </h2 >
 			<nav class="nav" >
 				<div class="nav--border" >
 					<ul >
@@ -50,40 +53,106 @@
 		</div >
 
 		<div class="main" >
+	   
+			<div id="center" >
+		<p> The program ran successfully! </p>
+		<p> You can now search for the shortest path </p>
 
-        <p>~program decription~</p>
-	   	<div id="box">
+	   	</p>
+		<form ref='SForm' id='SForm' action='/shortest'  method='post' encType="multipart/form-data"> 
+	   	<p>To find the shortest path from one node to another from 
+		'<%   if(typeof fil2 != "undefined" && fil2)      { %>
+		  <%=  fil2  %>
+		  <% }    %>', Enter the initial node and the destination node</p>
 
-	   		<label for="file-upload" class="custom-file-upload">
-	   		<i class="fa fa-cloud-upload"></i> Drag and drop a file or click to Upload a graph from file explorer
-	   		</label>
-	   		<input id="file-upload" type="file" />
+	   	<p>
+	   		Start Node : <input type="text"  size="12" value="" name="Snode" id="Snode">
+	   	</p>
+
+	   	<p>
+	   		End Node: <input type="text" size="12" value="" name="Lnode" id="Lnode">
+	   	</p>
+
+		
+		<div id="run">
+		<p>
+				<input type="submit" value=" Search " id="search" />
+				</p>
 			</div>
-
-			<p>
-			<div id="run">
-			 <input type="button" id='script' value=" Run Algorithm " onclick="href="/output"  margin: 0 auto;;>
-
-			 </div>
-			 </p>
+			<%   if(typeof searcherr != "undefined" && searcherr)      { %>
+			<div class="alertclass">
+			  <div class="alert-warning" role="alert">
+				<strong><%=  searcherr  %></strong>
+			  </div>
+			</div> 
+		  <% }    %>
+       
+		
+		
+			<br><br>
 			
-		<p> The algorithm ran successfully! </p>
+			<div class= path>
+			<p>
+			<br>
+			<%   if(typeof ans != "undefined" && ans)      { %>
+			Result
+			<textarea id="ans" cols="50" rows="4"> <%= ans %> </textarea>
+			</p>
+			 <% }    %>
+			<br><br>
+			
 
-	   	</p>
-
-	   	<p>To find the shortest path from one node to another in the file, Enter the initial node and the destination node</p>
-
-	   	<p>
-	   		Start node : <input type="text" id="initialNode" size="12" value="">
-	   	</p>
-
-	   	<p>
-	   		Destination node: <input type="text" id="destinationNode" size="12" value="">
-	   	</p>
-
-
-
-        
+			<p> Reset the graph file to upload another one to run the algorithm on using the button below  
+			</form>
+			
+			 <form action='/reset' method='post' encType="multipart/form-data">
+			<div id="run">
+			
+			 <input type="submit" value="Reset graph file" id="reset"/> 
+				 </p>
+				
+			</div>
+			 </form>
+			<p>
+			 <%   if(typeof reseterror != "undefined" && reseterror)      { %>
+			<div class="alertclass">
+			  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+				<strong><%=  reseterror  %></strong>
+			  </div>
+			</div> 
+		  <% }    %>
+			
+			<%   if(typeof reset != "undefined" && reset)      { %>
+			<div class="alertclass">
+			  <div class="alert alert-success alert-dismissible fade show" role="alert">
+				<strong><%=  reset  %></strong>
+			  </div>
+			</div> 
+		  <% }    %>
+       </p>
+	   </div>
 	   </div>
 	</body>
+
+	<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+<script>
+   function addDarkmodeWidget() {
+    new Darkmode(options).showWidget();
+  }
+  window.addEventListener('load', addDarkmodeWidget);
+
+  const options = {
+    bottom: '64px', // default: '32px' 
+    right: '32px', // default: '32px' 
+    left: 'unset', // default: 'unset' 
+    time: '0.5s', // default: '0.3s' 
+    mixColor: '#fff', // default: '#fff' 
+    backgroundColor: '#fff', // default: '#fff' 
+    buttonColorDark: '#100f2c', // default: '#100f2c' 
+    buttonColorLight: '#fff', // default: '#fff' 
+    saveInCookies: false, // default: true, 
+    label: '&#127763', // default: '' 
+    autoMatchOsTheme: true // default: true
+}
+</script> 
 </html>
